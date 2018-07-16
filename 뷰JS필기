@@ -438,3 +438,109 @@ https://jsfiddle.net/chrisvfritz/50wL7mdz/
 
 
 (여기까지 공부했다. https://kr.vuejs.org/v2/guide/index.html)
+
+-----------------------------------------------------
+
+CDN(콘텐츠 전송 네트워크 - 트래픽 과부하 줄이는 전송 방식) 추가시 형식
+
+
+
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+
+
+<script>
+
+    var app = new Vue({
+
+        el: ,
+
+        data: {
+
+            
+
+        },
+
+        computed:  {
+
+
+
+        },
+
+        methods: {
+
+        }
+    });
+
+</script>
+
+
+
+
+----------------------------------------------------
+
+자바스크립트 메소드
+
+map은 콜백 함수의 리턴을 모아서 새로운 배열을 만드는 것이 목적입니다.
+
+filter 메소드는 이름 그대로 요소들을 걸러내는 것이 목적입니다.
+
+
+
+자바스크립트 메세지 뒤집기 : message.split('').reverse().join('');
+
+    메시지라는 변수를 any character 로 각각 쪼갠 배열을 만들어서
+    그 배열 순서를 뒤집고 다시 배열을 string으로 합친다.
+
+
+뷰 문법
+
+v-bind:data = 축약형인 :data
+
+v-on:click = 축약형인 @click 
+
+v-text="" 태그의 텍스트 노드에 ""값을 넣어줌
+
+v-if = true일때 v-text 출력 / false면 출력 x
+
+
+v-for = " 풀어줄 연관배열의 단수형이름 in data안의 연관배열(복수형)
+
+        예 : tasks 라는 연관배열을 task라는 단수형으로 풀어준다. ( = foreach )
+
+            <li v-for="task in tasks"></li>
+
+            li태그의 속성에 추가로 v-text="task.description" 을 써주면 각 task의 description        
+            속성을 랜더링해준다.
+
+            li태그의 속성에 추가로 v-if="task.completed" 써주면
+            
+            completed속성의 값이 true인 것만 랜더링한다.
+
+            *뷰의 computed는 리액티브적으로 작동하므로 데이터의 tasks에서
+            한 인덱스의 completed속성의 값을 false를 true 로 바꿔줘도 화면에 반영되어 렌더링된다.
+
+
+computed Property?
+
+    뷰에서 미리 속성을 계산해놓고 필요할 때 렌더링하자.
+    뷰 인스턴스에서 computed 속성을 만들어서 그 안에
+    메소드를 미리 만들어 두면 된다.
+
+ES6 에 기반한 함수 짜는법 (ES5와 비교)
+
+    ES5 
+
+        tasks.filter(function (task) {
+            return ! task.completed;
+        })
+
+    ES6
+
+        tasks.filter(task => ! task.completed);
+
+
+캐쉬에 남아있는 경우? 새로고침해야 바뀌는 경우. -> Immediately return 방식
+
+캐쉬에 남아있던말던 바로 반영되는 경우 -> Reactive 방식
+
+* 뷰를 이용하면 얼마나 다이나믹하고(동적이고) 쉬운지 알 수 있다!
