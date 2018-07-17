@@ -544,3 +544,107 @@ ES6 에 기반한 함수 짜는법 (ES5와 비교)
 캐쉬에 남아있던말던 바로 반영되는 경우 -> Reactive 방식
 
 * 뷰를 이용하면 얼마나 다이나믹하고(동적이고) 쉬운지 알 수 있다!
+
+-------------------------------------
+
+components
+
+    1.우선 main.js 를 만들자.
+
+    2. Vue.component('task', {
+
+        template:'<li>foobar</li>
+
+        }) 를 입력하자.
+
+    어디서든 쓸 수 있는 글로벌 뷰 컴포넌트가 생성되었다.
+
+
+    3. new Vue({
+
+        el:'#root'
+
+        }
+
+        도 입력해주자.
+
+    
+    4. index.html 에서 id가 root 인 div 태그를 만들어놨었다고 가정하고
+        그 안에 <task></task> 를 써보자.
+        설정해둔 글로벌 뷰 컴포넌트가 나타나는 것을 확인할 수 있다.
+    
+
+* Vue.component('task', {
+
+        template:'<li><slot></slot></li>
+
+        })
+
+        으로 바꿔주면 슬롯 부분이 HTML에서 태그 안에
+        적는 텍스트 부분임을 의미한다.
+
+        즉 뷰 컴포넌트에 슬롯을 추가한 상태에서 index.html에 
+        <task>텍스트</task> 쓰면 화면상에는 <li>텍스트</li>를 
+        출력한다는 것.
+
+뷰 컴포넌트를 사용하면 이름을 줄 수 있고
+탬플릿을 줄 수 있고 data도 줄 수 있음.
+
+* 컴포넌트는 싱글 인스턴스와 연결되어 있지 않으므로
+    데이터를 함수로 해서 오브젝트를 return 해주어야 한다.
+
+----------------------------------------------------
+
+뷰 컴포넌트의 기본 구조 예시
+
+    HTML 
+    
+        <task-list></task-list>
+
+
+    main.js
+
+        Vue.component('task-list', {
+
+            template: '
+            
+                <div>
+                
+                    <task v-for="task in tasks'>{{ task.task }}</tesk>
+                    
+                </div>
+                
+            ',
+
+            data() {
+
+                return {
+
+                    tasks [
+
+                        { task: 'Go to the store', complete: true },
+
+                        { task: 'Go to the email', complete: false },
+
+                        { task: 'Go to the farm', complete: true },
+
+                        { task: 'Go to work', complete: false }
+
+                    ]
+
+                };
+
+            }
+
+        });
+
+
+        Vue.componet('task', {
+            template '<li><slot></slot></li>'
+        });
+
+        new Vue((
+
+            el: '#root'
+
+        ));
