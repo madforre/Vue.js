@@ -2838,4 +2838,9 @@ Do it ! Vue.js !
 
   총 8단계 : beforeCreate -> created -> beforeMount -> mounted -> beforeUpdate -> updated -> beforeDestroy -> destroyed
 
+* mounted 단계와 updated 단꼐에서 하위 컴포넌트의 화면 요소와 외부 라이브러리에 의해
+  주입된 요소의 최종 변환 시점이 다를 수 있다.
+  $nextTick() API 를 이용하여 HTML 코드로 최종 파싱(변환)될 때까지 기다린 후,
+  돔 제어 로직을 추가하자.
+  
 -------------------------------------------
