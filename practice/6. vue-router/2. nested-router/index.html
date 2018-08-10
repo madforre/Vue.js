@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Router Sample</title>
+</head>
+<body>
+  <div id="app">
+    <h3>네스티드(중첩된) 라우터 실습</h3>
+    <router-link to="/">최상위(루트) 컴포넌트로 이동</router-link>
+    <router-link to="/user">User 컴포넌트로 이동</router-link>
+    <router-link to="/user/posts">UserPost 컴포넌트로 이동</router-link>
+    <router-link to="/user/profile">UserProfile 컴포넌트로 이동</router-link>
+    <router-view></router-view>
+  </div>
+  <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script>
+    // 컴포넌트 내용 정의 (딕셔너리(연관배열)로 저장)
+    var User = {
+      template: `
+        <div>
+          User Component
+          <router-view></router-view>
+        </div>
+      `
+    };
+    var UserProfile = { template: '<p>User Profile Component</p>' };
+    var UserPost = { template: '<p>User Post Component</p>' };
+
+    // 네스티드 라우팅 정의
+    var routes = [
+      {
+        path: '/user',
+        component: User,
+        children: [
+          {
+            path: 'posts',
+            component: UserPost
+          },
+          {
+            path: 'profile',
+            component: UserProfile
+          },
+        ]
+      },
+    ];
+
+    // 뷰 라우터 정의 (routes 리스트를 뷰 라우터 인스턴스에 삽입하여
+    //                 URL에 따라 화면이 전환될 수 있게 정의한다.)
+    var router = new VueRouter({
+      // 히스토리 모드를 사용하려면 아파치나 서버 설정도 필요한 것 같다.
+      // mode: 'history',
+      routes
+    });
+
+    // 뷰 인스턴스에 라우터 추가 (새 인스턴스를 생성하고 라우터의 정보가 담긴 router를 추가)
+    var app = new Vue({
+      router
+    }).$mount('#app');
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Components Communication Quiz</title>
+</head>
+<body>
+
+<!-- 컴포넌트 복습 -->
+
+<div id="app">
+  <child-component v-bind:propsdata="message"></child-component>
+  <sibling-component v-bind:sibdata="anotherMessage"></sibling-component>
+</div>
+
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+<script src="practice.js">
+
+</script>
+</body>
+</html>
