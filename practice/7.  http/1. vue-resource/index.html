@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>뷰 리소스로 데이터 받아오기</title>
+  <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+</head>
+<body>
+  <div id="app">
+    <button v-on:click="getData">프레임워크 목록 가져오기</button>
+  </div>
+  <script>
+    new Vue({
+      el: '#app',
+        data: {
+          hou: 'ㅎㅇ',
+        },
+      methods: {
+        getData: function() {
+          this.$http.get('https://raw.githubusercontent.com/madforre/ES6-Project-Dibs/master/data/data.json')
+              .then(function(response) {
+              console.log(response);
+              // 버젼 업데이트되면서 Promise API 지원해서 JSON.parse로 파싱 안해줘도 되나봄
+              console.log(response.data);
+              console.log(response.data.body);
+            });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
