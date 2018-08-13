@@ -1,38 +1,25 @@
 <template>
   <section>
     <ul>
-      <li v-for="(todoItem, index) in todoItems" class="shadow">
+      <li v-for="(todoItem, index) in propsdata" class="shadow">
         <i class="checkBtn fas fa-feather" aria-hidden="true"></i>
         {{ todoItem }}
         <span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">
           <i class="fas fa-trash-alt" aria-hidden="true"></i>
         </span>
       </li>
-
     </ul>
   </section>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      todoItems: []
-    }
-  },
+  props: ['propsdata'],
   methods: {
     removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+      this.$emit('removeTodo', todoItem, index); // 이벤트 전달시 인자를 여러개 보낼 수 있다.
     }
   },
-  created() {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        this.todoItems.push(localStorage.key(i))
-      }
-    }
-  }
 }
 </script>
 

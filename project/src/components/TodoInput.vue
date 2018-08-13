@@ -1,6 +1,6 @@
 <template>
   <div class="inputBox shadow">
-    <input type="text" v-model="newTodoItem" placeholder="메모를 입력하세요 ^_^" v-on:keyup.enter="addTodo" maxlength="32">
+    <input type="text" v-model="newTodoItem" placeholder="메모를 입력하세요 ^_^" v-on:keyup.enter="addTodo">
     <span class="addContainer" v-on:click="addTodo">
       <i class="addBtn far fa-clock" aria-hidden="true"></i>
     </span>
@@ -18,7 +18,7 @@ export default {
     addTodo() {
       if (this.newTodoItem !== "") {
         var value = String(this.newTodoItem).trim()
-        localStorage.setItem(value, value);
+        this.$emit('addTodo', value); // 상위 컴포넌트인 App.vue로 이벤트 전달
         this.clearInput();
       }
     },
@@ -44,10 +44,10 @@ export default {
     background: #def7ac;
     border-style: none;
     font-size: 0.9rem;
-    text-indent: 1rem;
     color : darkgreen;
     font-weight:600;
     width : 70%;
+    text-indent: 1rem;
   }
   .addContainer {
     float: right;
