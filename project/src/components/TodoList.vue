@@ -1,14 +1,14 @@
 <template>
   <section>
-    <ul>
-      <li v-for="(todoItem, index) in propsdata" class="shadow">
+    <transition-group name="list" tag="ul">
+      <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
         <i class="checkBtn fas fa-feather" aria-hidden="true"></i>
         {{ todoItem }}
         <span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">
           <i class="fas fa-trash-alt" aria-hidden="true"></i>
         </span>
       </li>
-    </ul>
+    </transition-group>
   </section>
 </template>
 
@@ -53,5 +53,20 @@ export default {
     color: #de5757;
     margin-right: 1rem;
     cursor: pointer;
+  }
+
+  /* 뷰 애니메이션 */
+  .list-enter-active, .list-leave-active {
+    transition: all 1s;
+  }
+  .list-enter {
+    opacity: 0;
+    transform: translateY(-40px);
+    transition-timing-function: ease-in-out;
+  }
+  .list-leave-to {
+    opacity: 0;
+    transform: translateY(40px);
+    transition-timing-function: ease-in-out;
   }
 </style>

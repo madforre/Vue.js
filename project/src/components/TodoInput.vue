@@ -4,14 +4,27 @@
     <span class="addContainer" v-on:click="addTodo">
       <i class="addBtn far fa-clock" aria-hidden="true"></i>
     </span>
+
+<!-- use the modal component, pass in the prop -->
+<modal v-if="showModal" @close="showModal = false">
+  <h3 slot="header">알림</h3>
+  <h4 slot="body">메모 내용이 없습니다!</h4>
+  <span slot="footer" @click="showModal = false">
+    <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+  </span>
+
+</modal>
   </div>
 </template>
 
 <script>
+import Modal from './common/Modal.vue'
+
 export default {
   data: function() {
     return {
-      newTodoItem : ''
+      newTodoItem : '',
+      showModal: false
     }
   },
   methods: {
@@ -20,11 +33,16 @@ export default {
         var value = String(this.newTodoItem).trim()
         this.$emit('addTodo', value); // 상위 컴포넌트인 App.vue로 이벤트 전달
         this.clearInput();
+      } else {
+        this.showModal = !this.showModal;
       }
     },
     clearInput() {
       this.newTodoItem = '';
     }
+  },
+  components: {
+    Modal: Modal
   }
 }
 </script>
@@ -60,5 +78,9 @@ export default {
   .addBtn {
     color: white;
     vertical-align: middle;
+  }
+  .closeModalBtn {
+    cursor: pointer;
+    color: limegreen;
   }
 </style>

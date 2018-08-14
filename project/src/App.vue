@@ -8,7 +8,7 @@
      v-bind:하위 컴포넌트 에서 전달받을 propsdata명="상위에서 전달할 데이터"
      v-on:하위 컴포넌트에서 보낸 이벤트명="이벤트를 처리할 상위 컴포넌트 메소드 명" -->
     <TodoList v-bind:propsdata="todoItems" v-on:removeTodo="removeTodo"></TodoList>
-    <TodoFooter></TodoFooter>
+    <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ import TodoFooter from './components/TodoFooter.vue'
 export default {
   data() {
     return {
-      todoItems: []
+      todoItems: ['스파게티 소스 만들기', 'madforre@gmail.com', '1234567', '고양이 밥주기']
     }
   },
   created() {
@@ -42,6 +42,10 @@ export default {
     removeTodo(todoItem, index) {
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1);
+    },
+    clearAll() {
+      localStorage.clear();
+      this.todoItems = [];
     }
   },
   components: {
