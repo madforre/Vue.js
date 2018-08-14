@@ -29,27 +29,20 @@
 export default{
   data() {
     return {
-      updateTodoItem : []
+      updateTodoItem : ''
     }
   },
-  props: ['propsdata', 'pd', 'uI'],
-  // created() {
-  //   if (this.updateTodoItem.length < 1) {
-  //     for (var i = 0; i < localStorage.length; i++) {
-  //       this.updateTodoItem[i] = localStorage.getItem(localStorage.key(i))
-  //     }
-  //   }
-  // },
+  props: ['propsdata', 'pd'],
   methods: {
     removeTodo(todoItem, index) {
       this.$emit('removeTodo', todoItem, index); // 이벤트 전달시 인자를 여러개 보낼 수 있다.
     },
     beforeUpdateTodo(index) {
       this.$emit('beforeUpdateTodo', index);
-      this.updateTodoItem[index] = localStorage.getItem(localStorage.key(index))
+      this.updateTodoItem = localStorage.getItem(localStorage.key(index))
     },
     updateTodo(index) {
-      this.$emit('updateTodo', this.updateTodoItem[index], index);
+      this.$emit('updateTodo', this.updateTodoItem, index);
       this.clearInput();
     },
     clearInput() {

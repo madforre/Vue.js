@@ -7,7 +7,7 @@
      하위 컴포넌트 TodoList.vue에서 이벤트 전달 -> 상위 컴포넌트인 App.vue에서 이벤트 수신.
      v-bind:하위 컴포넌트 에서 전달받을 propsdata명="상위에서 전달할 데이터"
      v-on:하위 컴포넌트에서 보낸 이벤트명="이벤트를 처리할 상위 컴포넌트 메소드 명" -->
-    <TodoList v-bind:propsdata="todoItems" :pd="edit" :uI="updateInput" v-on:removeTodo="removeTodo" v-on:updateTodo="updateTodo" @beforeUpdateTodo="beforeUpdateTodo"></TodoList>
+    <TodoList v-bind:propsdata="todoItems" :pd="edit" v-on:removeTodo="removeTodo" v-on:updateTodo="updateTodo" @beforeUpdateTodo="beforeUpdateTodo"></TodoList>
     <TodoFooter v-on:removeAll="clearAll"></TodoFooter>
   </div>
 </template>
@@ -25,8 +25,7 @@ export default {
   data() {
     return {
       todoItems: [], // todoItems는 현재 데이터의 값을 의미
-      edit: [], // 리스트를 숨겼다 표시하기 위한 불린 값
-      updateInput: []
+      edit: [] // 리스트를 숨겼다 표시하기 위한 불린 값
     }
   },
   created() {
@@ -38,11 +37,6 @@ export default {
     if (localStorage.length > 0) {
       for (var i = 0; i < localStorage.length; i++) {
         this.todoItems.push(localStorage.getItem(localStorage.key(i)))
-      }
-    }
-    if (this.updateInput.length < 1) {
-      for (var i = 0; i < localStorage.length; i++) {
-        this.updateInput[i] = localStorage.getItem(localStorage.key(i))
       }
     }
   },
