@@ -76,7 +76,7 @@ export default{
   .updateBtn {
     margin-right: 0.5rem;
     float : right;
-    color : darkblue;
+    color : limegreen;
     cursor: pointer;
   }
 
@@ -87,7 +87,7 @@ export default{
   .updateAfterBtn {
     margin-right : 0.5rem;
     float : right;
-    color : darkblue;
+    color : limegreen;
     cursor : pointer;
   }
 
@@ -97,7 +97,7 @@ export default{
 
   .removeBtn {
     float : right;
-    color : black;
+    color : green;
     cursor: pointer;
   }
 
