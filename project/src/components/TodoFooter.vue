@@ -1,6 +1,6 @@
 <template>
   <div class="clearAllContainer">
-    <span class="clearAllBtn" @click="clearTodo">Clear All</span>
+    <span class="clearAllBtn" @click="clearTodo"><h5>다 지우기</h5></span>
   </div>
 </template>
 
@@ -25,7 +25,12 @@ export default {
   }
 
   .clearAllBtn {
-    color: #e20303;
+    color : black;
+    /* color: rgb(255, 128, 128); */
     display: block;
+  }
+
+  .clearAllBtn:hover {
+    color : red
   }
 </style>

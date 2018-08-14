@@ -2,22 +2,58 @@
   <section>
     <transition-group name="list" tag="ul">
       <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
+        <!-- {{pd}}
+        {{pd[index]}} -->
         <i class="checkBtn fas fa-feather" aria-hidden="true"></i>
-        {{ todoItem }}
-        <span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">
-          <i class="fas fa-trash-alt" aria-hidden="true"></i>
-        </span>
+        <small>{{ todoItem }}</small>
+        <div class="edit">
+          <input type="text" v-model="updateTodoItem" placeholder="수정할 내용을 입력합니다." v-on:keyup.enter="updateTodo(index)" v-show="pd[index]">
+        </div>
+        <div class="icon">
+          <span class="removeBtn" @click="removeTodo(todoItem, index)">
+            <i class="fas fa-trash-alt" aria-hidden="true"><small></small></i>
+          </span>
+          <span class="updateBtn">
+            <i class="fas fa-edit" aria-hidden="true" @click="beforeUpdateTodo(index)" v-show="!pd[index]"><small> 수정</small></i>
+          </span>
+          <span class="updateAfterBtn">
+            <i class="fas fa-edit" aria-hidden="true" @click="updateTodo(index)" v-show="pd[index]"><small> 저장</small></i>
+          </span>
+        </div>
       </li>
     </transition-group>
   </section>
 </template>
 
 <script>
-export default {
-  props: ['propsdata'],
+export default{
+  data() {
+    return {
+      updateTodoItem : []
+    }
+  },
+  props: ['propsdata', 'pd', 'uI'],
+  // created() {
+  //   if (this.updateTodoItem.length < 1) {
+  //     for (var i = 0; i < localStorage.length; i++) {
+  //       this.updateTodoItem[i] = localStorage.getItem(localStorage.key(i))
+  //     }
+  //   }
+  // },
   methods: {
     removeTodo(todoItem, index) {
       this.$emit('removeTodo', todoItem, index); // 이벤트 전달시 인자를 여러개 보낼 수 있다.
+    },
+    beforeUpdateTodo(index) {
+      this.$emit('beforeUpdateTodo', index);
+      this.updateTodoItem[index] = localStorage.getItem(localStorage.key(index))
+    },
+    updateTodo(index) {
+      this.$emit('updateTodo', this.updateTodoItem[index], index);
+      this.clearInput();
+    },
+    clearInput() {
+      this.updateTodoItem = '';
     }
   },
 }
@@ -32,27 +68,69 @@ export default {
   }
 
   li {
-    display: flex;
-    min-height: 50px;
     height: auto;
-    line-height: 50px;
     margin: 0.5rem 0;
     border: 1px solid limegreen;
     border-radius: 8px;
+    padding: 1rem;
   }
 
   .checkBtn {
-    line-height: 50px;
-    text-indent: 1rem;
     color: limegreen;
     margin-right: 0.5rem;
   }
 
-  .removeBtn {
-    margin-left: auto;
-    color: #de5757;
-    margin-right: 1rem;
+  .updateBtn {
+    margin-right: 0.5rem;
+    float : right;
+    color : darkblue;
     cursor: pointer;
+  }
+
+  .updateBtn:hover {
+    color : blue;
+  }
+
+  .updateAfterBtn {
+    margin-right : 0.5rem;
+    float : right;
+    color : darkblue;
+    cursor : pointer;
+  }
+
+  .updateAfterBtn:hover {
+    color : blue;
+  }
+
+  .removeBtn {
+    float : right;
+    color : black;
+    cursor: pointer;
+  }
+
+  .removeBtn:hover {
+    color : red;
+  }
+
+  .icon {
+    padding-top : 1rem;
+    margin-bottom : 1rem;
+
+  }
+
+  .edit {
+    margin: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .edit input {
+    width : 100%;
+    height : 3rem;
+    border: 1px dashed limegreen;
+  }
+
+  .edit input:focus {
+      outline: none;
   }
 
   /* 뷰 애니메이션 */

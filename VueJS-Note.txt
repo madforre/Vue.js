@@ -503,7 +503,7 @@ v-text="" 태그의 텍스트 노드에 ""값을 넣어줌
 v-if = true일때 v-text 출력 / false면 출력 x
 
 
-v-for = " 풀어줄 연관배열의 단수형이름 in data안의 연관배열(복수형)
+v-for = " 풀어줄 연관배열의 단수형이름 in data안의 연관배열(복수형) "
 
         예 : tasks 라는 연관배열을 task라는 단수형으로 풀어준다. ( = foreach )
 
@@ -2586,7 +2586,7 @@ Vue 컴포넌트
 Vue 관련 라이브러리
 
     Vuex: Flux 아이디어와 유사한 상태 관리 패턴 라이브러리
-    Vue-resource: XMLHttpRequest, JSONP 라이브러리 ($.ajax 안써도 됨)
+    Vue-resource: XMLHttpRequest, JSONP 라이브러리 ($.ajax 안써도 됨) -> axios 쓰자
     Vue-router: SPA 구현을 위한 라우터 클라이언트 라이브러리
     Weex: 모바일 크로스플랫폼 개발을 위한 라이브러리 (React Native 같은것)
 
