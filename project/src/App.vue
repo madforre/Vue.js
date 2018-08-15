@@ -24,7 +24,7 @@ import TodoFooter from './components/TodoFooter.vue'
 export default {
   data() {
     return {
-      todoItems: [], // todoItems는 현재 데이터의 값을 의미
+      todoItems: [], // todoItems는 현재 데이터의 값들을 의미. 값에 따른 로직(인덱스가 중복되면 안되겠죠?)
       edit: [] // 리스트를 숨겼다 표시하기 위한 불린 값
     }
   },
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     addTodo(todoItem) { // todoItem은 TodoInput 컴포넌트에서 올려 보낸 할 일 텍스트 값 인자이다.
-      localStorage.setItem(new Date().toUTCString(), todoItem);
+      localStorage.setItem(new Date().toUTCString()+' Madforre Unique key '+Math.random(), todoItem); // 간단한 고유키 구현
       this.todoItems.push(todoItem);
       this.edit.push(false);
     },
@@ -52,13 +52,31 @@ export default {
       this.edit.pop();
     },
     beforeUpdateTodo(index) {
+      for(var i = 0; i < localStorage.length; i++){
+        this.edit[i] = false
+      }
       this.edit[index] = !this.edit[index]
     },
     updateTodo(updateTodoItem, index) {
-      localStorage.setItem(localStorage.key(index), updateTodoItem);
-      this.todoItems.splice(index, 1, updateTodoItem)
-      this.edit[index] = !this.edit[index]
-      console.log(updateTodoItem, index)
+      // 값 중복 검사
+      for(var i = 0; i < localStorage.length; i++) {
+        if( localStorage.getItem(localStorage.key(i)) !== updateTodoItem) {
+          continue;
+        } else {
+          this.showModal_1 = !this.showModal_1;
+          return;
+        }
+      }
+      // 공백 검사
+      if(updateTodoItem !== ''){
+        // 공백 없고 중복되는 값 없으면 update
+        localStorage.setItem(localStorage.key(index), updateTodoItem);
+        this.todoItems.splice(index, 1, updateTodoItem)
+        // input show 관련 불린 값 변경
+        this.edit[index] = !this.edit[index]
+      } else {
+        this.showModal_2 = !this.showModal_2;
+      }
     },
     clearAll() {
       localStorage.clear();
@@ -70,7 +88,7 @@ export default {
     'TodoHeader' : TodoHeader,
     'TodoInput' : TodoInput,
     'TodoList' : TodoList,
-    'TodoFooter' : TodoFooter
+    'TodoFooter' : TodoFooter,
   }
 }
 </script>
