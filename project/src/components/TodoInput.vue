@@ -34,6 +34,10 @@ export default {
       showModal_2:false,
     }
   },
+  created() {
+    this.$EventBus.emit('showModal', this.showModal)
+    this.$EventBus.emit('showModal_2', this.showModal_2)
+  },
   props: ['propsdata'],
   methods: {
     addTodo() {

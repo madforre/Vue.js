@@ -63,7 +63,8 @@ export default {
         if( localStorage.getItem(localStorage.key(i)) !== updateTodoItem) {
           continue;
         } else {
-          this.showModal_1 = !this.showModal_1;
+          // 수정시 모달창 띄우기 (이벤트 버스 이용해서 추후 구현할 예정)
+          this.showModal = !this.showModal;
           return;
         }
       }
@@ -75,6 +76,7 @@ export default {
         // input show 관련 불린 값 변경
         this.edit[index] = !this.edit[index]
       } else {
+        // 수정시 모달창 띄우기 (이벤트 버스 이용해서 추후 구현할 예정)
         this.showModal_2 = !this.showModal_2;
       }
     },
@@ -94,6 +96,9 @@ export default {
 </script>
 
 <style>
+html {
+  font-family: 'Ubuntu', sans-serif
+}
 body {
   text-align: center;
 }
