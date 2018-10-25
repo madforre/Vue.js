@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+
+        ul, li {
+            list-style: none;
+        }
+
+        ul {
+            position : relative;
+            top : 0px;
+            left : 100px;
+            width : 800px;
+            height : auto;
+            /* border : 1px solid rgb(2, 0, 7); */
+            display : flex;
+            flex-wrap : wrap;
+            flex-direction: row;
+            padding : 0;
+        }
+
+        ul li {
+            position : relative;
+            box-sizing : border-box;
+            border : 1px solid rgb(10, 0, 104);
+            background: rgb(221, 221, 221);
+            flex : 1 1 auto;
+            width : auto;
+        }
+
+        ul li .resizer.column {
+            position : absolute;
+            right :-17px;
+            top : 5%;
+            width : 32px;
+            height : 90%;
+            background: #222;
+            cursor : w-resize;
+            z-index : 99;
+        }
+
+        ul li .resizer.row {
+            position : absolute;
+            bottom : -16px;
+            width : 100%;
+            cursor : s-resize;
+            height : 32px;
+            background: #555;
+            z-index: 99;
+        }
+
+        .hou {
+            height : auto;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app" >
+    <input type="number" v-model="row" @click="table" @keyup="table" min="1" max="20">
+    <input type="number" v-model="column" @click="table" @keyup="table" min="1" max="20">
+    <hr>
+    row : {{row}} <br>
+    column : {{column}} <br>
+
+    li 한 개당 width : {{width}} %<br>
+    필요한 li 개수 : {{ row * column }}<br>
+    <hr>
+    <div class="hou">
+    <ul>
+        <!-- 계산된 속성을 실행할 수 없는 중첩된 v-for는 메소드로 처리 -->
+        <li v-for="n in li(row, column)">
+            <div class="resizer column" v-show="n % row !== 0" @mousedown="colResize" @mouseup="stop" @mouseout="stop"></div>
+            <div class="resizer row"  @mousedown="rowResize" @mouseup="stop" @mouseout="stop"></div>
+        </li>
+    </ul>
+    </div>
+</div>
+<script>
+    const vm = new Vue({
+        el : "#app",
+        data : {
+            row : "",
+            column : "",
+        },
+        computed : {
+            width: function() {
+                return 100 / this.row;
+            }
+        },
+        methods : {
+            li : function (row,column) {
+                return row * column;
+            },
+            table : function (event) {
+                if (event.target.value.length <= 2){
+                    let lis = document.querySelectorAll("ul > li");
+                    for(i=0; i<lis.length; i++) {
+                        lis[i].style.width = this.width+"%";
+                        lis[i].style.height = "50px";
+                        lis[i].setAttribute("class", i+1);
+                    }
+                }
+            },
+            rowResize : function (event) {
+                event.preventDefault();
+                document.addEventListener("mousemove", this.rowMouseMoveHandler);
+            },
+            colResize : function (event) {
+                event.preventDefault();
+                document.addEventListener("mousemove", this.colMouseMoveHandler);
+            },
+            rowMouseMoveHandler : function (event) {
+                event.preventDefault();
+                let theClass = event.target.parentNode.getAttribute("class");
+                let lis = document.querySelectorAll("ul > li");
+
+                /* rowResize시 현재 row의 위치 대략 구하기 */
+                let checkRow = theClass / this.row;
+
+                // checkRow의 소수점을 제거한 rowIndex
+                let rowIndex;
+                for (let n = 0; n < this.column; n++) {
+                    if (checkRow > n && checkRow <= n+1) {
+                        rowIndex = n+1;
+                    }
+                }
+
+                // start
+                let rowStart = lis[this.row * (rowIndex - 1)].getAttribute("class") - 1;
+
+                // end
+                let rowEnd = lis[this.row * rowIndex - 1].getAttribute("class") - 1;
+
+                // height 에서 숫자만 걸러내고 숫자만 바꾼뒤 단위 붙여주어야 한다.
+                const re = /[0-9]*/i
+
+                // height
+                let defaultHeight = parseInt(lis[rowStart].style.height.match(re)[0]);
+
+                // while문에 쓰일 currentCell
+                let currentCell = rowStart;
+
+                while(true) {
+                    if (event.offsetY > 14) {
+                        lis[currentCell].style.height = (defaultHeight + 5) + "px";
+                    } else {
+                        lis[currentCell].style.height = (defaultHeight - 5) + "px";
+                    }
+                    if (currentCell == rowEnd) { 
+                        break;
+                    }
+                    currentCell = currentCell + 1;
+                }
+            },
+            colMouseMoveHandler : function (event) {
+                event.preventDefault();
+                const theClass = event.target.parentNode.getAttribute("class");
+                const lis = document.querySelectorAll("ul > li");
+
+                /* colResize시 현재 col 위치 구하기 */
+                const checkColumn = theClass % this.row;
+                const columnIndex = checkColumn - 1;
+
+                /* 정규표현식 사용시 소수점까지 구하도록 설정 */
+                const re = /[0-9\.]*/i
+
+                let beforeWidthFloat;
+                let afterWidthFloat;
+
+                if (event.offsetX > 15) {
+
+                    // offsetX 가 15보다 크면 checkCol의 왼쪽을 전부 선택한 후
+                    // 크기를 키운 다음 오른쪽을 전부 선택한 후 크기를 줄인다.
+
+                    for(let n=0; n < this.column; n++) {
+
+                        beforeWidthFloat = parseFloat(lis[columnIndex+this.row*n].style.width.match(re)[0]);
+                        afterWidthFloat = parseFloat(lis[columnIndex+this.row*n+1].style.width.match(re)[0]);
+
+                        // width가 1퍼센트 이상일때만 실행하고 미만이라면 
+                        // 오른쪽으로 더이상 줄지 않도록 만들어야 한다.
+
+                        if (afterWidthFloat >= 1) {
+                            lis[columnIndex+this.row*n].style.width = (beforeWidthFloat + 0.5) + "%";
+                            lis[columnIndex+this.row*n + 1].style.width = (afterWidthFloat - 0.5) + "%";
+                        }
+
+                    }
+
+                } else {
+
+                    // offsetX 가 15보다 작으면 checkCol의 오른쪽을 전부 선택한 후,
+                    // 크기를 키운 다음 왼쪽을 전부 선택한 후 크기를 줄인다.
+
+                    // 오른쪽이 커지는중이다. 왼쪽으로 더이상 줄지 않도록 해야 한다.
+                    // 왼쪽으로 리사이징시에는 버그 발생 하는 중이다.
+
+                    for(let n=0; n < this.column; n++) {
+
+                        beforeWidthFloat = parseFloat(lis[columnIndex+this.row*n].style.width.match(re)[0]);
+                        afterWidthFloat = parseFloat(lis[columnIndex+this.row*n+1].style.width.match(re)[0]);
+
+                        // width가 1퍼센트 이상일때만 실행하고 미만이라면 
+                        // 왼쪽으로 더이상 줄지 않도록 만들어야 한다.
+
+                        if (beforeWidthFloat >= 1) {
+                            lis[columnIndex+this.row*n].style.width = (beforeWidthFloat - 0.5) + "%";
+                            lis[columnIndex+this.row*n + 1].style.width = (afterWidthFloat + 0.5) + "%";
+                        }
+
+                    }
+
+                }
+            },
+            stop() {
+                console.log("마우스 업");
+                document.removeEventListener("mousemove",this.rowMouseMoveHandler);
+                document.removeEventListener("mousemove",this.colMouseMoveHandler);
+            }
+        },
+        beforeUpdate() {
+
+            if (this.row.length > 2) {
+                let cut = String(this.row);
+                cut = cut.slice(0,-1);
+                cut = cut.slice(0, 2);
+                this.row = parseInt(cut)
+            }
+
+            if (this.column.length > 2) {
+                let cut = String(this.column);
+                cut = cut.slice(0,-1);
+                cut = cut.slice(0, 2);
+                this.column = parseInt(cut)
+            }
+        },
+    })
+    </script>
+</body>
+</html>
